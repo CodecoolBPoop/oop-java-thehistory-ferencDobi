@@ -35,7 +35,39 @@ public class TheHistoryLinkedList implements TheHistory {
 
     @Override
     public void replaceMoreWords(String[] fromWords, String[] toWords) {
-        //TODO: check the TheHistory interface for more information
+        ListIterator<String> iterator = wordsLinkedList.listIterator();
+        while (iterator.hasNext()) {
+            boolean match;
+            String current = iterator.next();
+            if (current.equals(fromWords[0]) && (iterator.hasNext() || fromWords.length == 1)) {
+                match = true;
+                int i;
+                for (i = 0; i < fromWords.length; i++, current = iterator.next()) {
+                    if (!current.equals(fromWords[i])) {
+                        match = false;
+                        break;
+                    }
+                    if (!iterator.hasNext()) {
+                        if (i < fromWords.length - 1) match = false;
+                        break;
+                    }
+                }
+                if (i == size() - 1) i++;
+                if (match && i != size() && i != 0 && !(i < fromWords.length)) iterator.previous();
+                if (match && !iterator.hasNext() && (i == 0 || i < fromWords.length)) i++;
+                for (; i > 0; i--) {
+                    iterator.previous();
+                    if (match) {
+                        iterator.remove();
+                    }
+                }
+                if (match) {
+                    for (String toWord : toWords) {
+                        iterator.add(toWord);
+                    }
+                }
+            }
+        }
     }
 
     @Override
