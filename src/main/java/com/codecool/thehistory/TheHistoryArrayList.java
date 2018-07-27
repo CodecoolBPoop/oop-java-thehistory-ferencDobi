@@ -39,7 +39,20 @@ public class TheHistoryArrayList implements TheHistory {
 
     @Override
     public void replaceMoreWords(String[] fromWords, String[] toWords) {
-        //TODO: check the TheHistory interface for more information
+        int matchIndex, startIndex = 0;
+        do {
+            matchIndex = wordsArrayList.subList(startIndex, size()).indexOf(fromWords[0]);
+            startIndex += matchIndex;
+            if (matchIndex == -1 || startIndex >= size() - (fromWords.length - 1)) break;
+            if (wordsArrayList.subList(startIndex, startIndex + fromWords.length).equals(Arrays.asList(fromWords))) {
+                wordsArrayList.subList(startIndex, startIndex + fromWords.length).clear();
+                wordsArrayList.addAll(startIndex, Arrays.asList(toWords));
+                startIndex += toWords.length;
+                if (startIndex >= size() - (fromWords.length - 1)) break;
+            } else startIndex++;
+
+        }
+        while (true);
     }
 
     @Override
