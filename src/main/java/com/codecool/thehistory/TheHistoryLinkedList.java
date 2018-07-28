@@ -15,7 +15,7 @@ public class TheHistoryLinkedList implements TheHistory {
 
     @Override
     public void removeWord(String wordToBeRemoved) {
-        while (wordsLinkedList.remove(wordToBeRemoved));
+        wordsLinkedList.removeIf(word -> word.equals(wordToBeRemoved));
     }
 
     @Override
@@ -39,28 +39,27 @@ public class TheHistoryLinkedList implements TheHistory {
         while (iterator.hasNext()) {
             boolean match;
             String current = iterator.next();
+            // checks if the first item matches, and whether there's more items to check for
             if (current.equals(fromWords[0]) && (iterator.hasNext() || fromWords.length == 1)) {
                 match = true;
                 int i;
+                // loops through the items to check
                 for (i = 0; i < fromWords.length; i++, current = iterator.next()) {
-                    if (!current.equals(fromWords[i])) {
-                        match = false;
-                        break;
-                    }
-                    if (!iterator.hasNext()) {
-                        if (i < fromWords.length - 1) match = false;
+                    // breaks out of the loop if there's no match or no elements left to check
+                    if (!current.equals(fromWords[i]) || !iterator.hasNext()) {
+                        if (!current.equals(fromWords[i]) || i < fromWords.length - 1) match = false;
                         break;
                     }
                 }
-                if (i == size() - 1) i++;
-                if (match && i != size() && i != 0 && !(i < fromWords.length)) iterator.previous();
-                if (match && !iterator.hasNext() && (i == 0 || i < fromWords.length)) i++;
+                // necessary adjustments if the loop exited without a break
+                if (match && !(i < fromWords.length)) iterator.previous();
+                if (match && i < fromWords.length) i++;
+                // rewinds the iterator to the starting point and removes elements if there was a match
                 for (; i > 0; i--) {
                     iterator.previous();
-                    if (match) {
-                        iterator.remove();
-                    }
+                    if (match) iterator.remove();
                 }
+                // adds the new elements if there was a match
                 if (match) {
                     for (String toWord : toWords) {
                         iterator.add(toWord);
