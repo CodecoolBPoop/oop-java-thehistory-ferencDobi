@@ -49,18 +49,10 @@ public class TheHistoryArray implements TheHistory {
     }
 
     private void removalReplace(String[] fromWords, String[] toWords) {
-        for (int i = 0; i < size(); i++) {
-            if (wordsArray[i].equals(fromWords[0])) {
-                String[] slice = Arrays.copyOfRange(wordsArray, i, i + fromWords.length);
-                if (Arrays.equals(slice, fromWords)) {
-                    String[] tempArray = new String[fromWords.length];
-                    Arrays.fill(tempArray, "");
-                    System.arraycopy(toWords, 0, tempArray, 0, toWords.length);
-                    System.arraycopy(tempArray, 0, wordsArray, i, tempArray.length);
-                    i += toWords.length - 1;
-                }
-            }
-        }
+        String[] toWordsPad = new String[fromWords.length];
+        Arrays.fill(toWordsPad, "");
+        System.arraycopy(toWords, 0, toWordsPad, 0, toWords.length);
+        equalNumberReplace(fromWords, toWordsPad);
         removeWord("");
     }
 
